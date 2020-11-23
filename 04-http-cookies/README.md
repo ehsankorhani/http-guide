@@ -24,8 +24,8 @@ Cookies are no longer used for client-side storage, instead we should use:
 - `IndexedDB`<br>
     To store and retrieve objects that are indexed with a key
 
-<br>
-
+<br><br>
+---
 ## Creating cookies
 
 After receiving an HTTP request, a server can send one or more `Set-Cookie` headers with the response.
@@ -128,18 +128,79 @@ Set-Cookie: mykey=myvalue; SameSite=Strict
 ```
 
 It takes three possible values:
-- **Strict**: only to the same site that originated it
-- **Lax**: same, with exception for when the user navigates to a URL from an external site
-- **None**: no restrictions
+- `Strict`: only to the same site that originated it
+- `Lax`: same, with exception for when the user navigates to a URL from an external site
+- `None`: no restrictions
+
+<br>
+
+> Browsers are migrating to have cookies default to `SameSite=Lax`.
 
 <br>
 
 **Cookie prefixes**
+It is possible to use cookie prefixes to assert specific facts about the cookie.
+
+- `__Host-`: domain-locked
+- `__Secure-`
+
+Cookies with these prefixes that are not compliant with their restrictions are rejected by the browser.
 
 <br>
 
 **JavaScript access using `Document.cookie`**
 
+Cookies created via JavaScript cannot include the `HttpOnly` flag.
+
+```js
+document.cookie = "yummy_cookie=choco"; 
+document.cookie = "tasty_cookie=strawberry"; 
+```
+
+<br><br>
+
+---
+## Security
+
+> Information should be stored in *cookies* with the understanding that all cookie values are visible to, and can be changed by, the end-user.
+
+To mitigate attacks:
+
+- Use the `HttpOnly` attribute to prevent access to cookie values via JavaScript.
+- Cookies that are used for sensitive information (such as indicating authentication) should have a **short lifetime**, with the `SameSite` attribute set to `Strict` or `Lax`. 
+
+<br><br>
+
+---
+## Tracking and privacy
 
 <br>
-An expiration date or duration can be specified, after which the cookie is no longer sent. Additional restrictions to a specific domain and path can be set, limiting where the cookie is sent.
+
+### Third-party cookies
+- **First-party** cookie: If `Domain` is the same as the domain of the page you are on.
+- **Third-party** cookie: anything else
+    - images or other components on servers, which may set third-party cookies.
+    - mainly used for advertising and tracking across the web.
+
+
+<br><br>
+
+---
+## `Set-Cookie` header in server-side applications
+
+### Node.js
+
+#### `response.setHeader(name, value)`
+Sets a single header value for headers object. 
+
+```js
+request.setHeader('Cookie', ['type=ninja', 'language=javascript']);
+```
+
+
+<br><br>
+
+---
+### References
+
+- [Node.js Documentation](https://nodejs.org/docs/latest-v13.x/api/http.html#http_request_setheader_name_value)
