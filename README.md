@@ -13,6 +13,7 @@ Hypertext Transfer Protocol (HTTP) is an application-layer protocol for transmit
 1. Overview of HTTP
 2. HTTP Messages
 3. HTTP Caching
+4. HTTP Cookies
 
 <br><br>
 
